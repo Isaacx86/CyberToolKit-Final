@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IP Lookup Results</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/3.0.0/css/ionicons.css" rel="stylesheet">
+    <link href="./static/theme.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Additional styles specific to your page -->
+</head>
+
+<body>
+    <form id="firewallForm">
+
+        <label for="action">Select Action:</label>
+        <select id="action" name="action" required>
+            <option value="allow">Allow</option>
+            <option value="block">Block</option>
+            <option value="filter">Filter</option>
+        </select>
+
+        <label for="filterIP">Enter Filter IP (if applicable):</label>
+        <input type="text" id="filterIP" name="filterIP">
+
+        <label for="osType">Select Operating System:</label>
+        <select id="osType" name="osType" required>
+            <option value="linux">Linux</option>
+            <option value="windows">Windows</option>
+            <option value="osx">OSX</option>
+        </select>
+
+        <!-- Remove the open ports input field -->
+
+        <button type="button" onclick="generateFirewallRules()">Generate Firewall Rules</button>
+    </form>
+
+    <div id="firewallRules"></div>
+
+    <!-- Include your JavaScript file or code here -->
+</body>
+</html>
+
+
+<script>
+function generateFirewallRules() {
+    var action = document.getElementById("action").value;
+    var filterIP = document.getElementById("filterIP").value;
+    var osType = document.getElementById("osType").value;
+
+    // Get the IP address directly from the Shodan search results
+    var ipAddress = /* Retrieve the IP address from Shodan results, you may already have this value */;
+
+    // Make the AJAX request to the server with the obtained values
+    $.ajax({
+        type: "POST",
+        url: "/generate_rules",  // Use the correct endpoint
+        data: {
+            ipAddress: ipAddress,
+            action: action,
+            filterIP: filterIP,
+            osType: osType
+        },
+        success: function (data) {
+            // Display the generated firewall rules
+            document.getElementById("firewallRules").innerHTML = data;
+        },
+        error: function (error) {
+            console.log("Error:", error);
+        }
+    });
+}
+</script>

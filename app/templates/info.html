@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberToolkit Information</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="../static/theme.css" rel="stylesheet">
+    <!-- Include CSS stylesheets and any other necessary resources -->
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" id="navbar1">
+        <a class="navbar-brand" href="#">CyberToolkit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="info">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user_scans">Scans</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <form action="/logout" method="post">
+                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="profile">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content area -->
+    <div class="container mt-5">
+        <h1 class="text-center">CyberToolkit Information</h1>
+        
+        <!-- Introduction -->
+        <h2>Introduction</h2>
+        <p>Welcome to CyberToolkit! This page provides information about our system, including details about Common Vulnerabilities and Exposures (CVEs), how we calculate vulnerability scores, and more.</p>
+        
+        <!-- About CVEs -->
+        <h2>About CVEs</h2>
+        <p>Common Vulnerabilities and Exposures (CVEs) are unique identifiers assigned to known cybersecurity vulnerabilities. Each CVE entry contains information about a specific vulnerability, including a description, affected software, and a severity score.</p>
+
+        <!-- Understanding CVE Scores -->
+        <h3>Understanding CVE Scores</h3>
+        <p>CVE scores, also known as CVSS (Common Vulnerability Scoring System) scores, provide a numerical representation of the severity of a vulnerability. Scores range from 0.0 to 10.0, with higher scores indicating greater severity.</p>
+        <p>The severity of a CVE score is typically categorized as follows:</p>
+        <ul>
+            <li>0.0 - 3.9: Low severity</li>
+            <li>4.0 - 6.9: Medium severity</li>
+            <li>7.0 - 8.9: High severity</li>
+            <li>9.0 - 10.0: Critical severity</li>
+        </ul>
+
+        <!-- Weighting Average Scores -->
+        <h3>Weighting Average Scores</h3>
+        <p>At CyberToolkit, we calculate a weighted average vulnerability score based on the severity of CVEs present in a system. Each CVE score is assigned a weight based on its severity level, and these weights are used to calculate the overall vulnerability score.</p>
+
+        <!-- System Features -->
+        <h2>System Features</h2>
+        <p>Our system provides various features to help users assess and mitigate cybersecurity risks:</p>
+
+        <!-- Firewall Rule Generation -->
+        <h3>Firewall Rule Generation</h3>
+        <p>Generate custom firewall rules based on detected vulnerabilities to enhance network security.</p>
+
+        <!-- Open Ports Detection -->
+        <h3>Open Ports Detection</h3>
+        <p>Detect open ports on network devices to identify potential entry points for attackers.</p>
+
+        <!-- Conclusion -->
+        <h2>Conclusion</h2>
+        <p>Thank you for visiting CyberToolkit! We are committed to providing innovative solutions to enhance cybersecurity and protect your digital assets. If you have any questions or feedback, please don't hesitate to contact us.</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <!-- Add footer content and links as needed -->
+        </div>
+    </footer>
+
+    <!-- Include JavaScript files and any other necessary scripts -->
+</body>
+</html>

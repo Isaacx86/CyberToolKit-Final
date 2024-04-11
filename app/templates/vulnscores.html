@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IP Lookup Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Results for {{ host_info['ip_str'] }}</h1>
+        {% for key, value in host_info.items() %}
+            {% if key != '_shodan' and key != 'vulns' %}
+                <h2>{{ key }}</h2>
+                {% if value is mapping %}
+                    {% for sub_key, sub_value in value.items() %}
+                        <p>{{ sub_key }}: {{ sub_value }}</p>
+                    {% endfor %}
+                {% else %}
+                    <p>{{ value }}</p>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <div id="cve_info" class="my-4">
+            {% if vulnerability_scores %}
+                <h2>Vulnerability Scores</h2>
+                <ul>
+                    {% for score in vulnerability_scores %}
+                        <li>Score: {{ score }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No vulnerability scores available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.post("/cve_info", { ip_address: "{{ host_info['ip_str'] }}" }, function(data) {
+                // Extract vulnerability scores from the response
+                var vulnerability_scores = data.vulnerability_scores;
+
+                // Display vulnerability scores in the HTML
+                if (vulnerability_scores) {
+                    $("#cve_info").append("<h2>Vulnerability Scores</h2>");
+                    $("#cve_info").append("<ul>");
+                    for (var i = 0; i < vulnerability_scores.length; i++) {
+                        $("#cve_info").append("<li>Score: " + vulnerability_scores[i] + "</li>");
+                    }
+                    $("#cve_info").append("</ul>");
+                } else {
+                    $("#cve_info").append("<p>No vulnerability scores available.</p>");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

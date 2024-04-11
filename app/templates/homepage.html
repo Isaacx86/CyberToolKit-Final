@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vulnerability Scanner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+    <link href="{{ url_for('static', filename='theme.css') }}" rel="stylesheet">
+    <style>
+        /* Add custom CSS styles here */
+        .box {
+            background-color: #0f2336;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .box h2 {
+            color: #007bff;
+        }
+        .box p {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron mt-5">
+            <h1 class="display-4">Welcome to the Cyber Vulnerability Scanner</h1>
+            <p class="lead">Our scanner helps you identify vulnerabilities in your systems.</p>
+            <hr class="my-4">
+            <p>Here's what we offer:</p>
+            <ul>
+                <li>Real-time scanning of live domains and web servers.</li>
+                <li>Monitoring of your systems for potential security risks.</li>
+                <li>Customizable alerts and notifications to keep you informed.</li>
+            </ul>
+            <p>Get started today to secure your digital assets!</p>
+                {% if not current_user.is_authenticated %}
+                    <!-- Display the "Sign Up" button if the user is not logged in -->
+                    <a class="btn btn-primary btn-lg" href="/register" role="button">Sign Up</a>
+                {% else %}
+                    <!-- Display a welcome message if the user is logged in -->
+                <p>Welcome, {{ current_user.username }}!</p>
+            
+                {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="box">
+                    <h2>Real-Time Scanning</h2>
+                    <p>Our scanner continuously monitors live web servers, detecting vulnerabilities as they emerge.</p>
+                    <a class="btn btn-primary btn-lg" href="/search" role="button">Search Now</a>
+                    <!-- <img src="/static/real-time-scanning.png" alt="Real-Time Scanning" class="img-fluid"> -->
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <h2>Saved Scans</h2>
+                    <p>Review and read all past scans saved to your user account, Check found vulnerabilities and compare current Scans.</p>
+                    <a class="btn btn-primary btn-lg" href="/user_scans" role="button">Past Scans</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <h2>Information</h2>
+                    <p>Read information how the website functions, understand what a vulnerability is, and the score attributed to it.</p>
+                    <a class="btn btn-primary btn-lg" href="/info" role="button">About</a>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="box">
+                    <h2>Security </h2>
+                    <p>Receive personalized security recommendations based on your system's vulnerabilities and risk levels.</p>
+                    <!-- Add your content for security recommendations -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" id="navbar1">
+        <a class="navbar-brand" href="#">CyberToolkit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="info">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user_scans">Scans</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <form action="/logout" method="post">
+                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="profile">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    
+</body>
+</html>

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>IP Lookup Results</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/3.0.0/css/ionicons.css" rel="stylesheet">
+    <link href="./static/theme.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Additional styles specific to your page -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000c17;
+            padding-top: 50px;
+            color: #fff; /* Text color */
+        }
+        .container {
+            max-width: 900px; /* Adjust container width */
+            margin: 0 auto;
+        }
+        h1, h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #007bff; /* Label color */
+        }
+        input[type="text"], select {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #000; /* Input background color */
+            color: #fff; /* Input text color */
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        
+        /* THIS ADJUSTS.container {
+    margin: 0 auto; /* Center the container horizontally 
+    width: 90%; /* Set a width to dynamically adjust horizontally 
+    max-width: 1200px; /* Add a max-width to prevent it from becoming too wide 
+} */
+        .generated-rules {
+    margin-top: 20px;
+    background-color: #110101;
+    padding: 20px;
+    border-radius: 5px;
+    color: #fff; /* Rule text color */
+    white-space: normal; /* Allow text to wrap within the container */
+    word-wrap: break-word; /* Allow long words to wrap to the next line */
+}
+
+.generated-rule {
+    margin-bottom: 10px;
+}
+
+.generated-rule h3 {
+    color: #28a745;
+    margin-bottom: 5px;
+}
+
+.generated-rule pre {
+    background-color: #041628;
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff; /* Preformatted text color */
+}
+
+
+        .open-ports ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .open-ports li {
+            margin-bottom: 10px;
+            background-color: #190202;
+            padding: 10px;
+            border-radius: 5px;
+            color: #fff; /* Port text color */
+        }
+        /* Add styles for charts and other elements here */
+        #average_score {
+            color: #fff; /* Text color */
+        }
+        .chart-container {
+    position: relative;
+    display: flex;
+    padding-right: 200px; /* Add padding to the right to create space for the legend */
+}
+
+.legend-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 180px; /* Define width of the legend container */
+    padding-top: 50px; /* Adjust as needed */
+    padding-right: 20px; /* Adjust as needed */
+}
+
+        .legend {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        #progbar {
+            min-width: 500px; /* Adjust as needed */
+            background-color: #000c17;
+        }
+
+        #cve_info {
+            color: #fff; /* Text color */
+        }
+        /* Add more styles as needed */
+
+
+        #loading-text {
+            color: #ff6347; /* Set the desired color for the loading text */
+        }
+        #loading-spinner {
+            color: #ff6347; /* Set the desired color for the loading text */
+}
+
+        .navbar-nav .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0 15px; /* Adjust padding as needed */
+        }
+
+        .navbar-nav .nav-link button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #fff; /* Set text color */
+        }
+
+        .navbar-nav .nav-link button:hover {
+            color: #28a745; /* Set hover color */
+        }
+
+    </style>
+</head>
+<body data-spy="scroll" data-target="#navbar1" data-offset="60">
+    <header class="bg-primary">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-12">
+                    
+<div class="text-center m-0 vh-100 d-flex flex-column justify-content-center text-light">
+    <h1 class="display-4">CyberToolkit</h1>
+    <p class="lead">Results for {{ host_info['ip_str'] }}</p>
+  </div>
+  
+  <div class="collapsible-content" id="collapsible-content">
+    <h1 class="text-center my-4">Results for {{ host_info['ip_str'] }}</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-4">
+                <h2>Region Code</h2>
+                <p>{{ host_info.region_code }}</p>
+            </div>
+            <div class="mb-4">
+                <h2>Operating</h2>
+                <p>{{ host_info.os }}</p>
+            </div>
+            <div class="mb-4">
+                <h2>Country Code</h2>
+                <p>{{ host_info.country_code }}</p>
+            </div>
+            <div class="mb-4">
+                <h2>Latitude</h2>
+                <p>{{ host_info.latitude }}</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-4">
+                <h2>Organization</h2>
+                <p>{{ host_info.org }}</p>
+            </div>
+            <div class="mb-4">
+                <h2>Tags</h2>
+                <ul>
+                    {% for tag in host_info.tags %}
+                        <li>{{ tag }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="mb-4">
+                <h2>Domains</h2>
+                <ul>
+                    {% for domain in host_info.domains %}
+                        <li>{{ domain }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="mb-4">
+                <h2>Longitude</h2>
+                <p>{{ host_info.longitude }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mb-4">
+                <h2>Hostnames</h2>
+                <ul>
+                    {% for hostname in host_info.hostnames %}
+                        <li>{{ hostname }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  <!-- Add a button to toggle the collapsible section -->
+  <button class="toggle-button" id="toggle-button">Toggle Results</button>
+</header>
+
+<div class="container">
+    <h1 class="text-center">Firewall Rule Generator</h1>
+    <form action="/generate_rule" method="post">
+        <div class="form-group">
+            <label for="ip_address">Target IP Address:</label>
+            <input type="text" class="form-control" id="ip_address" name="ip_address" required>
+        </div>
+        <div class="form-group">
+            <label for="action">Action:</label>
+            <select class="form-control" name="action" required>
+                <option value="allow">Allow</option>
+                <option value="block">Block</option>
+                <option value="filter">Filter</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="filter_ip">Filter IP (Only for Filter action):</label>
+            <input type="text" class="form-control" id="filter_ip" name="filter_ip">
+        </div>
+        <div class="form-group">
+            <label for="os_type">Operating System:</label>
+            <select class="form-control" name="os_type" required>
+                {% if host_info.os %}
+                    {% set os_type = host_info.os.lower() %}
+                    <option value="windows" {% if "windows" in os_type %} selected {% endif %}>Windows ({{ host_info.os }})</option>
+                    <option value="linux" {% if "linux" in os_type %} selected {% endif %}>Linux</option>
+                    <option value="osx" {% if "osx" in os_type %} selected {% endif %}>OSX</option>
+                {% else %}
+                    <option value="windows">Windows</option>
+                    <option value="linux" selected>Linux</option>
+                    <option value="osx">OSX</option>
+                {% endif %}
+            </select>
+        </div>        
+        
+        <button type="submit" class="btn btn-primary">Generate Rule</button>
+    </form>
+
+    <div id="generated-rules-container" class="generated-rules"></div>
+</div>
+
+<div class="container mt-4">
+    <h2 class="text-center">Open Ports</h2>
+    <div class="open-ports">
+        <ul>
+            {% for port in host_info.ports %}
+                <li>{{ port }} {% if port in common_ports %} - {{ common_ports[port] }}{% endif %}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+    
+    <div class="container mt-5">
+        <div id="average_score" class="container mt-4"></div>
+        
+            <canvas id="vulnerabilityChart" width="400" height="200"></canvas>
+            <break></break>
+            <div class="chart-container">
+                <div class="legend-container">
+                    <!-- Legend will be inserted here dynamically -->
+                </div>
+                <canvas id="progbar" width="1000" height="300"></canvas>
+            </div>
+            
+        <div id="cve_info" class="container mt-4">
+            <div id="loading-container" class="container mt-4">
+                <div id="loading-spinner" class="spinner-border text-danger animate-spin" role="status" style="display: none; color: #1aff00 !important;"></div>
+                <div id="loading-text" style="display: none; color: #1aff00 !important;">Scanning...</div>
+            </div>
+            
+            <h2>CVE Information</h2>
+            {% if cve_info %}
+                {% for cve, cve_data in cve_info.items() %}
+                    <div class="mb-4">
+                        <h3>{{ cve }}</h3>
+                        {% if cve_data['VulnerabilityScore'] is defined %}
+                            <p>Calculated Vulnerability Score: {{ cve_data['VulnerabilityScore'] }}</p>
+                        {% endif %}
+                        {% if 'Error' in cve_data %}
+                            <p>{{ cve_data['Error'] }}</p>
+                        {% else %}
+                            <p>Description: {{ cve_data['NVDData']['result']['CVE_Items'][0]['cve']['description']['description_data'][0]['value'] }}</p>
+                            <p>Reference: {{ cve_data['NVDData']['result']['CVE_Items'][0]['references']['reference_data'][0]['url'] }}</p>
+                            <p>NIST.gov Response: {{ cve_data['NVDData']|tojson|safe }}</p>
+                            
+                            {% if 'impact' in cve_data and 'baseMetricV2' in cve_data['impact'] %}
+                                <h3>Base Metrics V2</h3>
+                                <pre>{{ cve_data['impact']['baseMetricV2'] | tojson(indent=2) }}</pre>
+                            {% endif %}
+                            
+                            <!-- Display CSV information -->
+                            <p>CSV Information:</p>
+                            <p>ID: {{ cve_data['ID'] }}</p>
+                            <p>Version: {{ cve_data['Version'] }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" id="navbar1">
+        <a class="navbar-brand" href="#">CyberToolkit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="search">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="info">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user_scans">Scans</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <form action="profile" method="post">
+                        <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">Logout</button>
+                    </form>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="profile">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+   
+    
+        
+
+    
+
+    <footer id="footer" class="bg-dark text-light py-5">
+        <div class="container py-5">
+            <!-- Footer content for resultingpage.html goes here -->
+        </div>
+    </footer>
+    <script>
+
+        $(document).ready(function() {
+            var currentIpAddress = "{{ host_info['ip_str'] }}";
+            $("#ip_address").val(currentIpAddress);
+    
+            // Function to calculate average score
+
+            function calculateWeightedAverageScore(data) {
+                var totalWeightedScore = 0;
+                var totalWeight = 0;
+
+                for (var index in data) {
+                    if (data.hasOwnProperty(index)) {
+                        var cveData = data[index];
+
+                        if (typeof cveData === 'object' && cveData !== null) {
+                            if (cveData['VulnerabilityScore'] !== undefined) {
+                                var score = cveData['VulnerabilityScore'];
+                                var weight = getWeight(score);
+                                totalWeightedScore += score * weight;
+                                totalWeight += weight;
+                            }
+                        }
+                    }
+                }
+
+                // Calculate the weighted average vulnerability score
+                return totalWeight > 0 ? totalWeightedScore / totalWeight : 0;
+            }
+
+            function getWeight(score) {
+                if (score >= 0 && score < 3.9) {
+                    return 1; // Low severity weight
+                } else if (score >= 3.9 && score < 6.9) {
+                    return 2; // Medium severity weight
+                } else if (score >= 6.9 && score < 8.9) {
+                    return 5; // High severity weight
+                } else {
+                    return 200; // Critical severity weight
+                }
+            }       
+    
+            //chart JS defined
+            function createChart(cveIDs, vulnerabilityScores) {
+                //  Chart.js chart create
+                var ctx = document.getElementById('vulnerabilityChart').getContext('2d');
+
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: cveIDs,
+                        datasets: [{
+                            label: 'Vulnerability Scores',
+                            data: vulnerabilityScores,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10
+                            }
+                        }
+                    }
+                });
+            }
+
+
+
+            function createProgressBar(averageScore) {
+                var ctx = document.getElementById('progbar').getContext('2d');
+
+                // Map vulnerability score ranges to colors and labels
+                const colorMap = {
+                    'None': { color: 'white', range: '0.0' },
+                    'Low': { color: 'green', range: '0.1 - 3.9' },
+                    'Medium': { color: 'yellow', range: '4.0 - 6.9' },
+                    'High': { color: 'orange', range: '7.0 - 8.9' },
+                    'Critical': { color: 'red', range: '9.0 - 10.0' }
+                };
+
+                // Determine the label based on the average score
+                let label;
+                if (averageScore === 0) {
+                    label = 'None';
+                } else if (averageScore >= 0.1 && averageScore <= 3.9) {
+                    label = 'Low';
+                } else if (averageScore >= 4.0 && averageScore <= 6.9) {
+                    label = 'Medium';
+                } else if (averageScore >= 7.0 && averageScore <= 8.9) {
+                    label = 'High';
+                } else if (averageScore >= 9.0 && averageScore <= 10.0) {
+                    label = 'Critical';
+                }
+
+                // Get the color and range based on the label from the colorMap
+                const color = colorMap[label].color;
+                const range = colorMap[label].range;
+
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Vulnerability Score'],
+                        datasets: [
+                            {
+                                data: [averageScore],
+                                backgroundColor: color,
+                                borderWidth: 0
+                            }
+                        ]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Application Vulnerability Score'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 10,
+                                ticks: {
+                                    stepSize: 0.1,
+                                    callback: (value) => {
+                                        if (value === 0) return 'None';
+                                        if (value === 10) return 'Critical';
+                                        return value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Dynamic legend 
+                const legendContainer = document.createElement('div');
+                legendContainer.classList.add('legend-container');
+                document.getElementById('progbar').parentNode.appendChild(legendContainer);
+
+                const legend = document.createElement('ul');
+                legend.classList.add('legend');
+                legendContainer.appendChild(legend);
+
+                for (const key in colorMap) {
+                    const color = colorMap[key].color;
+                    const label = key + ' (' + colorMap[key].range + ')';
+                    const item = document.createElement('li');
+                    item.classList.add('legend-item');
+                    const colorBox = document.createElement('div');
+                    colorBox.classList.add('legend-color');
+                    colorBox.style.backgroundColor = color;
+                    item.appendChild(colorBox);
+                    item.innerHTML += label;
+                    legend.appendChild(item);
+                }
+            }
+
+
+
+
+
+
+
+            function saveCVEInfoToDatabase(cveData, ipAddress) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/save_cve_info',
+                    data: { cve_info: cveData, ip_address: ipAddress }, // Directly pass the object
+                    contentType: 'application/json',
+                    success: function(response) {
+                        console.log('CVE information saved to the database:', response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error saving CVE information to the database:', error);
+                    }
+                });
+            }
+
+            // Make AJAX request to /cve_info when the document is ready
+            $('#loading-spinner').show(); // Show loading spinner
+            $('#loading-text').show();// show loading text
+            $.post("/cve_info", { ip_address: "{{ host_info['ip_str'] }}" }, function(data) {
+                handleCVEInfoData(data, "{{ host_info['ip_str'] }}"); // Pass ip_address to handleCVEInfoData
+            })
+            .done(function() {
+                // This code will execute when the AJAX request is successful
+                console.log("CVE information request succeeded.");
+                $('#loading-container').hide(); // Hide loading spinner on success
+            })
+            .fail(function(xhr, status, error) {
+                // This code will execute if the AJAX request encounters an error
+                console.error("Error fetching CVE information:", error);
+                $('#loading-container').hide(); // Hide loading spinner on error
+            });
+            
+            // Main function to handle data received from /cve_info
+            function handleCVEInfoData(data, ipAddress) {
+                console.log("Received data:", data);
+    
+    
+
+
+                // Iterate over each CVE entry and display information
+                for (var index in data) {
+                    if (data.hasOwnProperty(index)) {
+                        var cveData = data[index];
+    
+                        if (typeof cveData === 'object' && cveData !== null) {
+                            var vulnerabilityInfo = "<div class='mb-4'><h3>CVE: " + cveData['CVE'] + "</h3>";
+    
+                            // Display vulnerability score if available
+                            if (cveData['VulnerabilityScore'] !== undefined) {
+                                vulnerabilityInfo += "<p>Calculated Vulnerability Score: " + cveData['VulnerabilityScore'].toFixed(2) + "</p>";
+                            }
+    
+                            // Display NVD data here
+                            vulnerabilityInfo += "<p>Description: " + cveData['NVDData']['summary'] + "</p>";
+                            //vulnerabilityInfo += "<p>CVSS Score: " + cveData['NVDData']['cvss'] + "</p>";
+    
+                            vulnerabilityInfo += "</div>";
+                            $("#cve_info").append(vulnerabilityInfo);
+    
+                            // Save CVE information to the database
+                            saveCVEInfoToDatabase(cveData, ipAddress); // Pass ipAddress to saveCVEInfoToDatabase
+                        }
+                    }
+                }
+    
+                // Calculate the weighted average vulnerability score
+                var averageScore = calculateWeightedAverageScore(data);
+                console.log("Weighted average score is ", averageScore);
+    
+                // Display the average score on the page
+                $("#average_score").text("System Vulnerability Score: " + averageScore);
+    
+                // Use Chart.js to create a chart
+                createProgressBar(averageScore);
+                // Arrays to store CVE IDs and vulnerability scores to be itterated over
+                    var cveIDs = [];
+                    var vulnerabilityScores = [];
+
+                    // Iterate over each entry in data
+                    for (var index in data) {
+                        if (data.hasOwnProperty(index)) {
+                            var cveData = data[index];
+
+                            if (typeof cveData === 'object' && cveData !== null) {
+                                // Check if vulnerability score is available
+                                if (cveData['VulnerabilityScore'] !== undefined) {
+                                    // Add CVE ID and vulnerability score to arrays
+                                    cveIDs.push(cveData['CVE']);
+                                    vulnerabilityScores.push(cveData['VulnerabilityScore']);
+                                }
+                            }
+                        }
+                    }
+
+                    // Call function to create chart using collected data
+                    createChart(cveIDs, vulnerabilityScores);
+                }
+
+    
+            // Function to save CVE information to the database
+    
+            // Make AJAX request to /cve_info when the document is ready
+    
+            // Fetch firewall rules using /generate_rules
+            fetch("/generate_rules", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",  // Set Content-Type to JSON
+                },
+                body: JSON.stringify({ ip_address: "{{ host_info['ip_str'] }}" }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Received firewall rules:", data);
+    
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+    
+            // Provide user feedback for loading open ports
+            $('form').submit(function(event) {
+                event.preventDefault();  // Prevent the default form submission
+                $('#loading').show();
+    
+                // Use AJAX to submit the form
+                $.ajax({
+                    type: 'POST',
+                    url: '/generate_rule',
+                    data: $('form').serialize(),  // Serialize the form data
+                    dataType: 'json',  // Specify the expected data type
+                    success: function(data) {
+                        $('#loading').hide();
+    
+                        // Log the received data to the console for debugging 
+                        console.log(data);
+    
+                        // Update the page with the generated rules
+                        $('#generated-rules-container').html('');
+                        if (data.firewall_rules) {
+                            for (const firewall_rule of data.firewall_rules) {
+                                $('#generated-rules-container').append(`<pre>${firewall_rule}</pre><br>`);
+                            }
+                        } else {
+                            $('#generated-rules-container').append('<p>No firewall rules generated.</p>');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#loading').hide();
+                        console.error('Error:', textStatus, errorThrown);
+                        // Log additional details about the error
+                        console.log(jqXHR.responseText);
+    
+                        // Display an error message on the page
+                        $('#generated-rules-container').html('<p>Error: Failed to generate firewall rules.</p>');
+                    }
+                });
+            });
+    
+            function toggleCollapsible() {
+                var collapsibleContent = document.getElementById("collapsible-content");
+                if (collapsibleContent.style.display === "none" || collapsibleContent.style.display === "") {
+                    collapsibleContent.style.display = "block";
+                } else {
+                    collapsibleContent.style.display = "none";
+                }
+            }
+    
+            // Attach event listener to the button
+            document.getElementById("toggle-button").addEventListener("click", toggleCollapsible);
+        });
+    </script>
+    
+    
+</body>
+</html>

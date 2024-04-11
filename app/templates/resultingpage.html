@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberToolkit</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/3.0.0/css/ionicons.css" rel="stylesheet">
+    <link href="./static/theme.css" rel="stylesheet">
+    <link href="./template.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        body {
+            padding-top: 56px; /* Adjust based on your header height */
+        }
+    </style>
+</head>
+<body data-spy="scroll" data-target="#navbar1" data-offset="60">
+    <header class="bg-primary">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-12">
+                    <div class="text-center m-0 vh-100 d-flex flex-column justify-content-center text-light">
+                        <h1 class="display-4">CyberToolkit</h1>
+                        <p class="lead">Results for {{ host_info['ip_str'] }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mt-5">
+        {% for key, value in host_info.items() %}
+            {% if key != '_shodan' and key != 'vulns' %}
+                <div class="mb-4">
+                    <h2>{{ key }}</h2>
+                    {% if value is mapping %}
+                        {% for sub_key, sub_value in value.items() %}
+                            <p><strong>{{ sub_key }}:</strong> {{ sub_value }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>{{ value }}</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Display CVE information -->
+        <div id="cve_info" class="mb-4">
+            {% if cve_info %}
+                {% for cve, cve_data in cve_info.items() %}
+                    <h2>{{ cve }}</h2>
+                    {% if cve_data == 'Error retrieving data from NIST' %}
+                        <p>{{ cve_data }}</p>
+                    {% else %}
+                        <pre>{{ cve_data | tojson(indent=2) }}</pre>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No CVE information available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer id="footer" class="bg-dark text-light py-5">
+        <div class="container py-5">
+            <!-- Your footer content for resultingpage.html goes here -->
+        </div>
+    </footer>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
+</body>
+</html>

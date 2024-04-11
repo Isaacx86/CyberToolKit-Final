@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./static/theme.css" rel="stylesheet">
+    <title>[Your Application Name] - Cyber Security Vulnerability Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #555;
+        }
+
+        header {
+            background-color: #08090a;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            flex-basis: 45%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .box h2 {
+            color: #007bff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .box p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #007bff;
+            color: #fff;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary" id="navbar1">
+        <a class="navbar-brand" href="#">CyberToolkit</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="info">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="user_scans">Scans</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout">Logout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile">Profile</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    
+    <header>
+        <h1>Welcome to [Your Application Name]</h1>
+        <p>Your Complete Cyber Security Vulnerability Solution</p>
+    </header>
+
+    <div class="container">
+        <div class="box">
+            <h2>What We Offer</h2>
+            <p>
+                <strong>Vulnerability Scanning:</strong> Utilize our advanced scanning technology to detect vulnerabilities across your network, systems, and applications.
+            </p>
+            <p>
+                <strong>Risk Assessment:</strong> Get detailed insights into the severity of vulnerabilities and prioritize them based on potential impact.
+            </p>
+        </div>
+
+        <div class="box">
+            <h2>How It Works</h2>
+            <ol>
+                <li>Sign Up: Create your account on [Your Application Name] platform.</li>
+                <li>Scan: Initiate vulnerability scans on your desired targets, whether it's a single device or an entire network.</li>
+                <li>Analyze: Review scan results and assess the level of risk associated with each vulnerability.</li>
+                <li>Remediate: Follow our step-by-step guidance to patch or mitigate vulnerabilities effectively.</li>
+                <li>Monitor: Set up continuous monitoring to stay informed about new vulnerabilities and security risks.</li>
+            </ol>
+        </div>
+
+        <div class="box">
+            <h2>Why Choose Us</h2>
+            <ul>
+                <li><strong>Accuracy:</strong> Our tool utilizes industry-leading vulnerability databases and scanning techniques to ensure precise results.</li>
+                <li><strong>Ease of Use:</strong> With an intuitive interface and clear instructions, [Your Application Name] is suitable for both beginners and experts.</li>
+            </ul>
+        </div>
+
+        <div class="box">
+            <h2>Get Started Today!</h2>
+            <p>Protect your digital assets and safeguard against cyber threats with [Your Application Name]. Sign up now to start your free trial and experience the peace of mind that comes with robust cyber security measures.</p>
+            <a href="#" class="btn">Sign Up</a>
+            <a href="#" class="btn">Contact Us</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2024 [Your Application Name] - All Rights Reserved
+    </footer>
+</body>
+</html>
