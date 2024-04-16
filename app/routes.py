@@ -16,8 +16,8 @@ import socket
 from datetime import datetime
 
 ################################################### API KEYS 
-SHODAN_API_KEY = 'LDAxkgwomLK17x6VFVGUhiNZ6ZlWUktz'
-NVD_API_KEY= '2a5467cd-1a42-451f-ab2f-dd356ecb7f7c'
+SHODAN_API_KEY = '#'
+NVD_API_KEY= '2#'
 ###################################################
 
 
